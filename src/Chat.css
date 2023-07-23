@@ -4,7 +4,7 @@
   padding: 20px;
   box-sizing: border-box;
   overflow-y: hidden;
-  width: 350px;
+  width: 550px;
 	height: 500px;
   margin: auto;
   background-color: rgb(232, 229, 225);
@@ -36,7 +36,7 @@
   color: white;
 }
 
-.chat-form {
+.chatform {
   display: flex; 
   justify-content: space-between; 
   align-items: center; 
@@ -61,7 +61,7 @@
   width: 80px;
   margin-top: -10px;
   background-color: rgb(205, 93, 93);
-  margin-left: 100px;
+  margin-left: 280px;
 }
 .chat-header > button:hover{
   background-color: white;

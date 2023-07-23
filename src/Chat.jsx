@@ -36,7 +36,7 @@ function Chat({ username, handleLogout }) {
       ))}
       {loading && <div>Loading...</div>}
     </div>
-    <form onSubmit={handleSubmit} className="chat-form">
+    <form onSubmit={handleSubmit} className="chatform">
       <input
         type="text"
         value={question}
