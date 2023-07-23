@@ -1,11 +1,11 @@
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 90vh;
   padding: 20px;
   box-sizing: border-box;
-  overflow: hidden;
-  width: 80%;
+  overflow-y: hidden;
+  width: 350px;
+	height: 500px;
   margin: auto;
   background-color: rgb(232, 229, 225);
 }
@@ -26,34 +26,44 @@
 
 .chat-bot {
   align-self: flex-start;
-  background-color: #0f805a;
-  color: white;
+  background-color: white;
+  color: #573b8a;
 }
 
 .chat-user {
   align-self: flex-end;
-  background-color: #0f3480;
+  background-color: #573b8a;
   color: white;
 }
 
 .chat-form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  justify-content: space-around;
-  margin: auto;
- 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 0 10px;
 }
-#ask{
-  width: 50px;
+
+#ask {
+  width: 80px; 
   height: 40px;
-  margin-top: 15px;
-  margin-left: 20px;
-}
-.chat-form input {
-  height: auto;
-  padding: 20px;
 }
 
 .chat-form input {
-  flex-grow: 1;
+  flex-grow: 1; 
+  height: 40px; 
+  padding: 0 10px; 
+}
+.chat-header{
+  display: flex;
+  justify-content: space-between;
+}
+.chat-header > button{
+  width: 80px;
+  margin-top: -10px;
+  background-color: rgb(205, 93, 93);
+  margin-left: 100px;
+}
+.chat-header > button:hover{
+  background-color: white;
+  color: rgb(205, 93, 93);
 }
