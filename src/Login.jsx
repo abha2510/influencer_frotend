@@ -15,7 +15,7 @@ function Login({ setUsername: setParentUsername }) {
       if (res.data.message === "Login successful.") {
         setParentUsername(username); 
         localStorage.setItem("username", username); 
-        navigate("/")
+        navigate(("/"))
       } else {
         setError(res.data.error);
       }
