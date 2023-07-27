@@ -13,26 +13,30 @@ const Form = ({ setUsername: setParentUsername }) => {
   const [error, setError] = useState(null);
   const [message, setMessage] = useState(null);
   const [messageType, setMessageType] = useState(null);
-
+  const [formSwitch, setFormSwitch] = useState(true);
   const handleSubmit = async (e) => {
     e.preventDefault();
+   
     try {
       const res = await axios.post(
         "https://tasty-gown-lion.cyclic.app/register",
         { username, password, email }
       );
-      navigate("/login");
+      
       setParentUsername(username);
       localStorage.setItem("username", username);
       setMessageType("success");
       setMessage("User registered successfully.");
+      setFormSwitch(false);
     } catch (e) {
       setMessageType("error");
       setMessage("Username already exists");
+      setFormSwitch(false);
     }
   };
   const handleLogSubmit = async (e) => {
     e.preventDefault();
+   
     try {
       const res = await axios.post("https://tasty-gown-lion.cyclic.app/login", {
         username,
@@ -40,8 +44,10 @@ const Form = ({ setUsername: setParentUsername }) => {
       });
       if (res.data.message === "Login successful.") {
         setParentUsername(username);
+        setMessage("Login successful 😊")
         localStorage.setItem("username", username);
-        navigate("/");
+        navigate("/openaikey");
+       
       } else {
         setError(res.data.error);
       }
@@ -56,16 +62,10 @@ const Form = ({ setUsername: setParentUsername }) => {
       {message && <div className={`alert alert-${messageType}`}>{message}</div>}
       <div className="main">
         <input type="checkbox" id="chk" aria-hidden="true"></input>
+        {formSwitch ? (
         <div className="signup">
-          <form action="">
-            <label for="chk" aria-hidden="true">
-              <Link to="/checker">
-                <span id="checker">Checker</span>
-              </Link>
-            </label>
-          </form>
-          <form onSubmit={handleSubmit}>
-            <label for="chk" aria-hidden="true">
+          <form onSubmit={handleSubmit} id='signup'>
+            <label for="chk"  aria-hidden="true">
               Sign up
             </label>
             <input
@@ -95,9 +95,10 @@ const Form = ({ setUsername: setParentUsername }) => {
             <button>Sign up</button>
           </form>
         </div>
+         ) : (
         <div className="login">
           <form onSubmit={handleLogSubmit}>
-            <label for="chk" aria-hidden="true">
+            <label for="chk" id='login' aria-hidden="true">
               Login
             </label>
             <input
@@ -117,6 +118,7 @@ const Form = ({ setUsername: setParentUsername }) => {
             <button>Login</button>
           </form>
         </div>
+          )}
       </div>
     </>
   );
