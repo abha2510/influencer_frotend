@@ -45,14 +45,14 @@
 
 .chat-bot {
   align-self: flex-start;
-  background-color: #ba6763;
+  background-color: #6f1c1f;
   color: white;
   margin-top: 5px;
 }
 
 .chat-user {
   align-self: flex-end;
-  background-color: #6f1c1f;
+  background-color: #ba6763;
   color: white;
 
 }

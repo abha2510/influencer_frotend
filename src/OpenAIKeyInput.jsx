@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-
 function OpenAIKeyInput({ setGlobalOpenAIKey }) {
   const navigate = useNavigate();
   const [key, setKey] = useState('');
@@ -9,18 +8,26 @@ function OpenAIKeyInput({ setGlobalOpenAIKey }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     setGlobalOpenAIKey(key);
-    navigate('/chat', { state: { openAIKey: key } });  
+    localStorage.setItem("openAIKey", key);
+    navigate('/chat', { state: { openAIKey: key } });
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <textarea
-        style={{padding:"20px",width:"200%",marginLeft:"-50%"}}
-        type="text"
+      <input
+        style={{
+          display: 'block',
+          width: '200%',
+          height: '50px',
+          padding: '20px',
+          borderRadius:'20px',
+          marginLeft:"-50%"
+        }}
+        type="password"
         value={key}
         onChange={(e) => setKey(e.target.value)}
         placeholder="Enter your OpenAI Key"
-      ></textarea>
+      />
       <button type="submit">Submit</button>
     </form>
   );

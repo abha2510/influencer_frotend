@@ -39,15 +39,14 @@ const Form = ({ setUsername: setParentUsername }) => {
    
     try {
       const res = await axios.post("https://tasty-gown-lion.cyclic.app/login", {
-        username,
-        password,
+        username: logusername,
+        password: logpassword,
       });
       if (res.data.message === "Login successful.") {
-        setParentUsername(username);
+        setParentUsername(res.data.username);
+        localStorage.setItem("username", res.data.username);
         setMessage("Login successful 😊")
-        localStorage.setItem("username", username);
         navigate("/openaikey");
-       
       } else {
         setError(res.data.error);
       }
@@ -56,6 +55,7 @@ const Form = ({ setUsername: setParentUsername }) => {
       setMessage("Invalid credentials");
     }
   };
+
 
   return (
     <>
@@ -93,6 +93,7 @@ const Form = ({ setUsername: setParentUsername }) => {
               required=""
             ></input>
             <button>Sign up</button>
+            <p className="p">Already a user? <span className="span" onClick={() => setFormSwitch(false)}>Login</span></p>
           </form>
         </div>
          ) : (
@@ -116,6 +117,7 @@ const Form = ({ setUsername: setParentUsername }) => {
               required=""
             ></input>
             <button>Login</button>
+            <p className="p">Don't have an account? <span className="span" onClick={() => setFormSwitch(true)}>Sign up</span></p>
           </form>
         </div>
           )}

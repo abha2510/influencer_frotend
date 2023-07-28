@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./Chat.css";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ScoreChecker from "./ScoreChecker";
 
 function Chat({ username, handleLogout }) {
-  const { state } = useLocation();
-  const openAIKey = state?.openAIKey;
+  const navigate = useNavigate();
+  const openAIKey = localStorage.getItem("openAIKey");
   const [question, setQuestion] = useState("");
   const [chatHistory, setChatHistory] = useState([
     { message: "How can I help you today?", sender: "bot" },
@@ -15,10 +15,23 @@ function Chat({ username, handleLogout }) {
   const lastChatRef = useRef(null);
 
   const scrollToBottom = () => {
-    lastChatRef.current.scrollIntoView({ behavior: "smooth" });
-  };
+    if (lastChatRef.current) {
+      lastChatRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+};
 
-  useEffect(scrollToBottom, [chatHistory]);
+  useEffect(() => {
+    if(chatHistory){
+      scrollToBottom();
+    }
+  }, [chatHistory]);
+  
+  if(!username){
+    navigate("/");
+    return null;
+  }
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();

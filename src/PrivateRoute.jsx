@@ -1,10 +1,10 @@
-import { Navigate, useLocation, Outlet } from "react-router-dom";
+import { Route, Navigate } from 'react-router-dom';
 
-function PrivateRoute() {
+function PrivateRoute({ children, ...props }) {
   const username = localStorage.getItem("username");
-  const location = useLocation();
+  const isAuth = Boolean(username); 
   
-  return username ? <Outlet /> : <Navigate to="/login" state={{ from: location }} />;
+  return isAuth ? <Route {...props}>{children}</Route> : <Navigate to="/" />;
 }
 
-export default PrivateRoute
+export default PrivateRoute;
