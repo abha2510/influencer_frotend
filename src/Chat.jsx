@@ -3,9 +3,16 @@ import axios from "axios";
 import "./Chat.css";
 import { useNavigate } from "react-router-dom";
 import ScoreChecker from "./ScoreChecker";
+import socketIOClient from "socket.io-client";
 
+const ENDPOINT = "https://tasty-gown-lion.cyclic.app";
 function Chat({ username, handleLogout }) {
   const navigate = useNavigate();
+  const socket = useRef();
+  const [scoreChecker, setScoreChecker] = useState({
+    question: "",
+    answer: "",
+  });
   const openAIKey = localStorage.getItem("openAIKey");
   const [question, setQuestion] = useState("");
   const [chatHistory, setChatHistory] = useState([
@@ -13,25 +20,46 @@ function Chat({ username, handleLogout }) {
   ]);
   const [loading, setLoading] = useState(false);
   const lastChatRef = useRef(null);
+  useEffect(() => {
+    socket.current = socketIOClient(ENDPOINT);  // Assigning socket instance
+
+    socket.current.on('message', (data) => {
+      setChatHistory((prevChatHistory) => [
+        ...prevChatHistory,
+        { message: data.message, sender: "bot" },
+      ]);
+    });
+
+    socket.current.on('error', (error) => {
+      console.error("Socket Error:", error);
+    });
+
+    // disconnect the socket when component unmounts
+    return () => socket.current.disconnect();
+  }, []);
+
 
   const scrollToBottom = () => {
     if (lastChatRef.current) {
       lastChatRef.current.scrollIntoView({ behavior: "smooth" });
     }
-};
+  };
 
   useEffect(() => {
-    if(chatHistory){
+    if (chatHistory) {
       scrollToBottom();
     }
   }, [chatHistory]);
-  
-  if(!username){
+
+  if (!username) {
     navigate("/");
     return null;
   }
-  
-  
+
+  const handleReset = () => {
+    setScoreChecker({ question: "", answer: "" });
+  };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,6 +71,7 @@ function Chat({ username, handleLogout }) {
       { message: currentQuestion, sender: "user" },
     ]);
     setLoading(true);
+    socket.current.emit('message', { message: currentQuestion, userId: localStorage.getItem("userId") });
 
     try {
       const res = await axios.post(
@@ -56,6 +85,12 @@ function Chat({ username, handleLogout }) {
         ...prevChatHistory,
         { message: res.data.chatbot_response, sender: "bot" },
       ]);
+
+      // Add this line after updating the chat history
+      setScoreChecker({
+        question: currentQuestion,
+        answer: res.data.chatbot_response,
+      });
     } catch (error) {
       console.error("Error while getting response from server:", error);
     } finally {
@@ -98,7 +133,11 @@ function Chat({ username, handleLogout }) {
         </form>
       </div>
       <div className="ScoreChecker">
-        <ScoreChecker />
+        <ScoreChecker
+          question={scoreChecker.question}
+          answer={scoreChecker.answer}
+          handleReset={handleReset}
+        />
       </div>
     </div>
   );

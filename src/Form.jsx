@@ -16,13 +16,17 @@ const Form = ({ setUsername: setParentUsername }) => {
   const [formSwitch, setFormSwitch] = useState(true);
   const handleSubmit = async (e) => {
     e.preventDefault();
-   
+    if (password.length < 8) {
+      setMessageType("error");
+      setMessage("Password should be at least 8 characters long");
+      return;
+    }
     try {
       const res = await axios.post(
         "https://tasty-gown-lion.cyclic.app/register",
         { username, password, email }
       );
-      
+
       setParentUsername(username);
       localStorage.setItem("username", username);
       setMessageType("success");
@@ -36,7 +40,7 @@ const Form = ({ setUsername: setParentUsername }) => {
   };
   const handleLogSubmit = async (e) => {
     e.preventDefault();
-   
+
     try {
       const res = await axios.post("https://tasty-gown-lion.cyclic.app/login", {
         username: logusername,
@@ -45,7 +49,7 @@ const Form = ({ setUsername: setParentUsername }) => {
       if (res.data.message === "Login successful.") {
         setParentUsername(res.data.username);
         localStorage.setItem("username", res.data.username);
-        setMessage("Login successful 😊")
+        setMessage("Login successful 😊");
         navigate("/openaikey");
       } else {
         setError(res.data.error);
@@ -56,71 +60,80 @@ const Form = ({ setUsername: setParentUsername }) => {
     }
   };
 
-
   return (
     <>
       {message && <div className={`alert alert-${messageType}`}>{message}</div>}
       <div className="main">
         <input type="checkbox" id="chk" aria-hidden="true"></input>
         {formSwitch ? (
-        <div className="signup">
-          <form onSubmit={handleSubmit} id='signup'>
-            <label for="chk"  aria-hidden="true">
-              Sign up
-            </label>
-            <input
-              type="text"
-              name="txt"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-              required=""
-            ></input>
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Email"
-              required=""
-            ></input>
-            <input
-              type="password"
-              name="pswd"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required=""
-            ></input>
-            <button>Sign up</button>
-            <p className="p">Already a user? <span className="span" onClick={() => setFormSwitch(false)}>Login</span></p>
-          </form>
-        </div>
-         ) : (
-        <div className="login">
-          <form onSubmit={handleLogSubmit}>
-            <label for="chk" id='login' aria-hidden="true">
-              Login
-            </label>
-            <input
-              type="text"
-              value={logusername}
-              onChange={(e) => setLogUsername(e.target.value)}
-              placeholder="Username"
-              required=""
-            ></input>
-            <input
-              type="password"
-              value={logpassword}
-              onChange={(e) => setLogPassword(e.target.value)}
-              placeholder="Password"
-              required=""
-            ></input>
-            <button>Login</button>
-            <p className="p">Don't have an account? <span className="span" onClick={() => setFormSwitch(true)}>Sign up</span></p>
-          </form>
-        </div>
-          )}
+          <div className="signup">
+            <form onSubmit={handleSubmit} id="signup">
+              <label for="chk" aria-hidden="true">
+                Sign up
+              </label>
+              <input
+                type="text"
+                name="txt"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Username"
+                required=""
+              ></input>
+              <input
+                type="email"
+                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                required=""
+              ></input>
+              <input
+                type="password"
+                name="pswd"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Password"
+                required=""
+              ></input>
+              <button>Sign up</button>
+              <p className="p">
+                Already a user?{" "}
+                <span className="span" onClick={() => setFormSwitch(false)}>
+                  Login
+                </span>
+              </p>
+            </form>
+          </div>
+        ) : (
+          <div className="login">
+            <form onSubmit={handleLogSubmit}>
+              <label for="chk" id="login" aria-hidden="true">
+                Login
+              </label>
+              <input
+                type="text"
+                value={logusername}
+                onChange={(e) => setLogUsername(e.target.value)}
+                placeholder="Username"
+                required=""
+              ></input>
+              <input
+                type="password"
+                value={logpassword}
+                onChange={(e) => setLogPassword(e.target.value)}
+                placeholder="Password"
+                required=""
+              ></input>
+              <button>Login</button>
+              <p className="p">
+                Don't have an account?{" "}
+                <span className="span" onClick={() => setFormSwitch(true)}>
+                  Sign up
+                </span>
+              </p>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );
