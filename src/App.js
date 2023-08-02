@@ -21,6 +21,7 @@ const App = () => {
     setUsername(null);
     localStorage.removeItem("username");
     localStorage.removeItem("openAIKey"); 
+    localStorage.removeItem("userId")
     navigate("/");
   };
 

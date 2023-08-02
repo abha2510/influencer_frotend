@@ -4,6 +4,7 @@
   width: 95vw;
   justify-content: space-between;
   padding: 20px;
+  position: sticky;
 }
 
 .chat-container {

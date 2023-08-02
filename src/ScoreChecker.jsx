@@ -28,7 +28,6 @@ const ScoreChecker = ({ question, answer, handleReset }) => {
     }
   };
 
-  console.log(response);
   return (
     <div className="container">
       {!submitted ? (

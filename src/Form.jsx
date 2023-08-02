@@ -40,15 +40,25 @@ const Form = ({ setUsername: setParentUsername }) => {
   };
   const handleLogSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const res = await axios.post("https://tasty-gown-lion.cyclic.app/login", {
         username: logusername,
         password: logpassword,
       });
       if (res.data.message === "Login successful.") {
+        const chatHistoryRes = await axios.post("https://tasty-gown-lion.cyclic.app/getChatHistory", {
+          userId: res.data.id,
+        });
+      
+        localStorage.setItem('chatHistory', JSON.stringify(chatHistoryRes.data.map(chat => ({
+          message: chat.question,
+          sender: 'user',
+        }))));
+      
         setParentUsername(res.data.username);
         localStorage.setItem("username", res.data.username);
+        localStorage.setItem("userId", res.data.id); // Save userId into local storage
         setMessage("Login successful 😊");
         navigate("/openaikey");
       } else {
@@ -59,6 +69,7 @@ const Form = ({ setUsername: setParentUsername }) => {
       setMessage("Invalid credentials");
     }
   };
+  
 
   return (
     <>
